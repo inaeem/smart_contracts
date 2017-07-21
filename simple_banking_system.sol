@@ -11,17 +11,16 @@ contract Bank {
     owner = msg.sender;
   }
   // Add value of the transaction to the sender's account.
-  function deposit() {
+  function deposit() payable {
     balances[msg.sender] += msg.value;
   }
   // Withdraw the given amount from the account
-  function withdraw(uint amount) {
+  function withdraw(uint amount) payable {
     // Skip if withdraw is valid
-    if (balances[msg.sender] < amount || amount == 0)
-      return false;
+    require(balances[msg.sender] >= amount && amount > 0);
     // Withdraw the given amount from the account
     balances[msg.sender] -= msg.value;
-    msg.sender.send(amount);
+    msg.sender.transfer(amount);
   }
   // Destructor
   function remove() {
