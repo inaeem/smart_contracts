@@ -1,0 +1,18 @@
+pragma solidity ^0.4.11;
+
+import "single_account_authentication";
+
+contract Mortal is Auth {
+    // An ‘Auth’ (or ‘SingleAccountAuth’) contract instance as a constructor param and use that
+    Auth auth;
+    // Pass ‘SingleAccountAuth’
+    function Mortal(address _auth){
+        auth = Auth(_auth);
+    }
+    // Only admin of the contract can destruct
+    function kill() {
+        if (auth.isAdmin()){
+            selfdestruct(msg.sender);
+        }
+    }
+}
